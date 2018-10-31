@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+	<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+		"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	<!-- 
+		1.namespace表示命名空间 
+		2.必须为接口名
+	 -->
+	<mapper namespace="cn.tedu.dao.AddressDao">
+	
+		<!-- void insert(Address address); -->
+		<!-- 添加地址信息 -->
+		<!-- 
+			id的名称必须为方法名称
+		 -->
+		<insert id="insert"
+				parameterType="cn.tedu.bean.Address">
+			insert into t_address(
+				province,city,area,user_address
+			)values(
+				#{province},#{city},
+				#{area},#{userAddress}
+			)
+		</insert>
+		<!-- Integer delete(Integer id); -->
+		<delete id="delete">
+			delete from t_address
+			where id = #{id}
+		</delete>
+		
+		<!-- Address selectById(Integer id); 
+			1.默认的情况下，封装记录的字段值，
+						     是按照字段名称进行映射
+			2.如果字段名和属性名不相同，那么不能完成映射
+			3.解决方案：第一种，给字段起别名（别名和属性名相同）
+		-->
+		<select id="selectById"
+				resultType="cn.tedu.bean.Address">
+			select 
+				id,province,city,area,
+				user_address userAddress
+			from t_address
+			where 
+				id = #{id}		
+		</select>
+		<!-- List<Address> selectAll(); 
+		3.解决方案：第二种，通过字段和属性名之间一对一映射
+			1)<resultMap>用来实现一对一映射的节点
+			2)type表示对象的类型
+			3)<id>表示映射主键字段
+			4)<result>表示映射非主键字段  
+		-->
+		<resultMap type="cn.tedu.bean.Address" 
+		           id="resultAddress">
+		     <id column="id" property="id"/>
+		     <result column="province" property="province"/>
+		     <result column="city" property="city"/>
+		     <result column="area" property="area"/>
+		     <result column="user_address" 
+		             property="userAddress"/>
+		</resultMap>
+		<select id="selectAll"
+				resultMap="resultAddress">
+			select * from t_address		
+		</select>
+		<!-- 
+			void updateAreaById(@Param("id") Integer id,
+			                  @Param("area") String area);
+		 -->
+		<!--
+			1.如果参数的个数多余一个，
+			那么使用@Param进行映射
+			2.@Param("id") 表示配置文件中的 #{id}
+		-->
+		<update id="updateAreaById">
+			update t_address
+			set 
+				area = #{area}
+			where 
+				id=#{id}
+		</update>
+	</mapper>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
